@@ -72,4 +72,4 @@ This table shows the control unit output for each of the opcodes shown above.
 This table shows which values correspond to each operation performed on the ALU
 
 # Download
-You can download project clone repository with link [http](https://github.com/IMayanLP/16bit-processor.git) or [ssh](git@github.com:IMayanLP/16bit-processor.git), or by [clicking here](https://github.com/IMayanLP/16bit-processor/archive/refs/heads/master.zip)
+You can download project clone repository with link http `https://github.com/IMayanLP/16bit-processor.git`, ssh `git@github.com:IMayanLP/16bit-processor.git`, or by [clicking here](https://github.com/IMayanLP/16bit-processor/archive/refs/heads/master.zip)
