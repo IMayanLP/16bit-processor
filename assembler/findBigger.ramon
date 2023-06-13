@@ -1,3 +1,18 @@
+ADDI $r0, 2 // salvando vetor na memoria, daqui...
+SW $r0, 0 // salva o valor na memoria
+RESET $r0 // reseta o r0
+ADDI $r0, 4 // coloca o proximo valor
+SW $r0, 1 // salva, e por ai vai...
+RESET $r0
+ADDI $r0, 3
+SW $r0, 2
+RESET $r0
+ADDI $r0, 7
+SW $r0, 3
+RESET $r0
+ADDI $r0, 5
+SW $r0, 4
+RESET $r0 // ...ate aqui
 ADDI $r0, 0 // i = 0, tb vai ser o endereco
 ADDI $r7, 4 // indice maximio do vetor
 LW $r1, $r0 // carrega i em r1
