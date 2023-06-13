@@ -23,19 +23,24 @@ If you don't want to program, there is a pre-made algorithm that finds the large
 # Imagens
 ## Main circuit
 ![main circuit](images/main.jpg)
+
 main circuit, responsible for uniting all the sub circuits specialized in specific tasks.
 ## Instruction Memory
 ![instruction memory](images/instruction_memory.jpg)
+
 this circuit is responsible for storing all the instructions of the algorithm, at each clock, a new instruction is loaded and executed.
 ## Registers
 ![registers](images/registers.jpg)
+
 this circuit is responsible for storing the bank of registers.
 > **Names:** they are numbered from 0 to 7, being necessary to specify them in the codes as *$r0, $r1, ... $r7*.
 ## ALU
 ![ALU](images/ALU.jpg)
+
 this circuit is responsible for performing the arithmetic and logical operations.
 ## Memory
 ![memory](images/memory.jpg)
+
 The RAM memory used by the SW and LW instructions, it is in this memory that values are saved and read at specific addresses.
 > **Adresses:** This memory is addressed from 0 to 254, with 255 being the last address, but reserved for the number 0.
 
@@ -43,21 +48,27 @@ The RAM memory used by the SW and LW instructions, it is in this memory that val
 # Documentation
 ## **Instruction type table**
 ![Instruction type table](images/instruction_type_table.jpg)
+
 This table shows the formats of implemented instructions and which values are used in each type.
 ## **Signal descriptions**
 ![Signal descriptions](images/signal_desc.jpg)
+
 This table describes all the control signals that come from the control circuit.
 ## **Instruction set**
 ![Instruction set](images/instruction_set.jpg)
+
 This table presents all the details about the instructions implemented in the processor, such as the type, OpCode, a brief description and an example of how to use it.
 ## **Instruction codes**
 ![Instruction codes](images/instruction_codes.jpg)
+
 This table shows the code that will be sent to the control unit for each instruction.
 ## **Instruction signal**
 ![Instruction signal](images/instruction_signal.jpg)
+
 This table shows the control unit output for each of the opcodes shown above.
 ## **ALUOp signal**
 ![ALUOp signal](images/ALUOp_signal.jpg)
+
 This table shows which values correspond to each operation performed on the ALU
 
 # Download
