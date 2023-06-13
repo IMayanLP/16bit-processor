@@ -1,4 +1,6 @@
-# 8-bit Processor
+# ID RMN 0 Processor
+
+> **Meaning:** Instruction Driven Registor Manipulator Number 0.
 
 This project aims to implement the operation of a single cycle MIPS processor, for this purpose, logisim 2.7.x was used, which can be found both in this repository and in the download link below:
 [download link](https://sourceforge.net/projects/circuit/files/latest/download)
