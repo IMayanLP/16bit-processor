@@ -1,0 +1,6 @@
+ADDI $r0, 3
+SW $r0, 2
+_TERCEIRO
+
+ADDI $r0, 3
+_QUINTO

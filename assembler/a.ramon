@@ -1,0 +1,39 @@
+ADDI $r0, 2 // salvando vetor na memoria, daqui...
+SW $r0, 0 // salva o valor na memoria
+RESET $r0 // reseta o r0
+ADDI $r0, 4 // coloca o proximo valor
+SW $r0, 1 // salva, e por ai vai...
+RESET $r0
+ADDI $r0, 3
+
+SW $r0, 2
+RESET $r0
+ADDI $r0, 7
+SW $r0, 3
+
+
+RESET $r0
+ADDI $r0, 5
+SW $r0, 4
+RESET $r0 // ...ate aqui
+ADDI $r0, 0 // i = 0, tb vai ser o endereco
+ADDI $r7, 4 // indice maximio do vetor
+LW $r1, $r0 // carrega i em r1
+ADDI $r0, 1 // soma 1 em i
+LW $r2, $r0 // carrega i em r2
+_LOOP // inicio do for
+
+
+SLT $r6, $r7, $r0 // condicao do for
+BIT $r6, _EXIT // branch pro final
+SLT $r5, $r2, $r1 // bota se r2 < r1 em r5
+BIT $r5, _CONTINUE // se r2 < r1 n faz nada
+
+RESET $r1 // se nao, reseta r1
+ADD $r1, $r1, $r2 // bota r2 em r1
+_CONTINUE
+ADDI $r0, 1 // soma 1 no endereco (ou i)
+LW $r2, $r0 // carrega o novo i em r2
+J _LOOP // volta pro for
+_EXIT
+PRINT $r1 // print maior
