@@ -9,7 +9,7 @@ def addFlag(flags_list, key, new_flag):
 # pega uma flag do dicionario e retorna como 8 bits
 def getFlag(flag_list, key):
     n = flag_list.get(key)
-    return format(n, '08b')
+    return format(n, '024b')
 
 # pega o numero do registrador e retorna como 3 bits
 def getRegisNumber(r):
@@ -22,6 +22,12 @@ def getRegisNumber_8(r):
     if r[2] == '0':
         return '00000000'
     return format(int(r[2]), '08b')
+
+# pega o numero do registrador e retorna como 8 bits
+def getRegisNumber_24(r):
+    if r[2] == '0':
+        return '000000000000000000000000'
+    return format(int(r[2]), '024b')
 
 
 if __name__ == "__main__":
@@ -96,9 +102,9 @@ if __name__ == "__main__":
                     case 'J':
                         binary = '00111' + '000' + getFlag(flags, instruction[1])
                     case 'RESET':
-                        binary = '00101' + getRegisNumber(instruction[1]) + format(255, '08b')
+                        binary = '00101' + getRegisNumber(instruction[1]) + format(255, '024b')
                     case 'PRINT':
-                        binary = '00011' + getRegisNumber(instruction[1]) + format(0, '08b')
+                        binary = '00011' + getRegisNumber(instruction[1]) + format(0, '024b')
 
             case 3:
                 # divide as instruções de tamanho 3 em dois tipos
@@ -113,7 +119,7 @@ if __name__ == "__main__":
                                 binary += '10101'
                             case 'SW':
                                 binary += '10110'
-                        binary += getRegisNumber(instruction[1]) + getRegisNumber_8(instruction[2])
+                        binary += getRegisNumber(instruction[1]) + getRegisNumber_24(instruction[2])
                     else:
                         # se não for, por fim comparamos a instrução com as possiveis instruções de tamanho 3
                         match instruction[0]:
@@ -134,7 +140,7 @@ if __name__ == "__main__":
 
                                 binary += '00110'
 
-                        binary += getRegisNumber(instruction[1]) + format(int(instruction[2]), '08b')
+                        binary += getRegisNumber(instruction[1]) + format(int(instruction[2]), '024b')
 
             case 4:
                 # caso o tamanho da instrução seja 4 temos essas 3 possiblidades que são do tipo R
@@ -148,7 +154,7 @@ if __name__ == "__main__":
                 # então depois de adicionar o opcode na string adicionamos o valor dos 3 registradores
                 # e dois bits que não são usados no final
                 binary += getRegisNumber(instruction[1]) + getRegisNumber(instruction[2])
-                binary += getRegisNumber(instruction[3]) + '00'
+                binary += getRegisNumber(instruction[3]) + '000000000000000000'
             # toda vez que realizamos uma instrução que não é um Jump salvamos o numero do ultimo registrador
             # em uma variavel
         if instruction[0] != 'J' and len(instruction) > 1:
@@ -158,9 +164,10 @@ if __name__ == "__main__":
             binary_instructions.append(binary)
     # e por ultimo adicionamos uma instrução que para o clock passando o ultimo registrador utilizado
     # para que ele apareça no display do processador
-    binary_instructions.append('11111' + last_reg + '00000000')
+    binary_instructions.append('11111' + last_reg + '000000000000000000000000')
     # processo de conversão de binario para hexa-decimal
     for b in binary_instructions:
+        print(b)
         hex_file.write(hex(int(b, 2))[2:].zfill(4))
         hex_file.write('\n')
 

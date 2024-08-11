@@ -1,6 +1,6 @@
 ADDI $r0, 2 // salvando vetor na memoria, daqui...
 SW $r0, 0 // salva o valor na memoria
-RESET $r0 // reseta o r0
+RESET $r0
 ADDI $r0, 4 // coloca o proximo valor
 SW $r0, 1 // salva, e por ai vai...
 RESET $r0
