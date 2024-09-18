@@ -9,13 +9,13 @@ def addFlag(flags_list, key, new_flag):
 # pega uma flag do dicionario e retorna como 8 bits
 def getFlag(flag_list, key):
     n = flag_list.get(key)
-    return format(n, '08b')
+    return format(n, '022b')
 
 # pega o numero do registrador e retorna como 3 bits
 def getRegisNumber(r):
     if r[2] == '0':
-        return '000'
-    return format(int(r[2]), '03b')
+        return '0000'
+    return format(int(r[2]), '04b')
 
 # pega o numero do registrador e retorna como 8 bits
 def getRegisNumber_8(r):
@@ -23,6 +23,10 @@ def getRegisNumber_8(r):
         return '00000000'
     return format(int(r[2]), '08b')
 
+def getRegisNumber_22(r):
+    if r[2] == '0':
+        return '0000000000000000000000'
+    return format(int(r[2]), '022b')
 
 if __name__ == "__main__":
 
@@ -34,7 +38,7 @@ if __name__ == "__main__":
     hex_file.write('v2.0 raw\n')
     Lines = file.readlines()
     l = 0
-    last_reg = '000'
+    last_reg = '0000'
     binary_instructions = []
     for line in Lines:
         if '//' in line:
@@ -65,7 +69,7 @@ if __name__ == "__main__":
                 l -= 1
         l += 1
 
-    print(flags)
+    #print(flags)
     for line in Lines:
         # divide os comentarios das linhas de codigo
         if '//' in line:
@@ -84,7 +88,7 @@ if __name__ == "__main__":
                 i = i - 1
             else:
                 i = i + 1
-        print(instruction)
+        #print(instruction)
         match len(instruction):
             # Divide as instruções pelo tamanho delas
             case 2:
@@ -94,17 +98,17 @@ if __name__ == "__main__":
                 # o PRINT mostra o registrador passado no display feito no processador
                 match instruction[0]:
                     case 'J':
-                        binary = '00111' + '000' + getFlag(flags, instruction[1])
+                        binary = '00111' + '00000' + getFlag(flags, instruction[1])
                     case 'RESET':
-                        binary = '00101' + getRegisNumber(instruction[1]) + format(255, '08b')
+                        binary = '00101' + getRegisNumber(instruction[1]) + '0' + format(255, '022b')
                     case 'PRINT':
-                        binary = '00011' + getRegisNumber(instruction[1]) + format(0, '08b')
+                        binary = '00011' + getRegisNumber(instruction[1]) + '0' + format(0, '022b')
 
             case 3:
                 # divide as instruções de tamanho 3 em dois tipos
                 # as que contem flag, que vão ser instrucões branch
                 if '_' in instruction[2]:
-                    binary = '01000' + getRegisNumber(instruction[1]) + getFlag(flags, instruction[2])
+                    binary = '01000' + getRegisNumber(instruction[1]) + '0' + getFlag(flags, instruction[2])
                 else:
                     # se não contem flag checamos a terceira posição para saber se é um LW ou SW com um registrador
                     if '$r' in instruction[2]:
@@ -113,7 +117,7 @@ if __name__ == "__main__":
                                 binary += '10101'
                             case 'SW':
                                 binary += '10110'
-                        binary += getRegisNumber(instruction[1]) + getRegisNumber_8(instruction[2])
+                        binary += getRegisNumber(instruction[1]) + '0' + getRegisNumber_22(instruction[2])
                     else:
                         # se não for, por fim comparamos a instrução com as possiveis instruções de tamanho 3
                         match instruction[0]:
@@ -121,6 +125,10 @@ if __name__ == "__main__":
                                 binary += '00011'
                             case 'SUBI':
                                 binary += '00100'
+                            case 'MUTI':
+                                binary += '01011'
+                            case 'DIVI':
+                                binary += '01100'
                             case 'LW':
                                 binary += '00101'
                             case 'SW':
@@ -134,21 +142,29 @@ if __name__ == "__main__":
 
                                 binary += '00110'
 
-                        binary += getRegisNumber(instruction[1]) + format(int(instruction[2]), '08b')
+                        binary += getRegisNumber(instruction[1]) + '0' + format(int(instruction[2]), '022b')
 
             case 4:
                 # caso o tamanho da instrução seja 4 temos essas 3 possiblidades que são do tipo R
                 match instruction[0]:
                     case 'SLT':
                         binary += '00010'
+                    case 'SMT':
+                        binary += '10010'
                     case 'ADD':
                         binary += '00000'
                     case 'SUB':
                         binary += '00001'
+                    case 'MUT':
+                        binary += '01001'
+                    case 'DIV':
+                        binary += '01010'
+                    case 'SET':
+                        binary += '10011'
                 # então depois de adicionar o opcode na string adicionamos o valor dos 3 registradores
                 # e dois bits que não são usados no final
                 binary += getRegisNumber(instruction[1]) + getRegisNumber(instruction[2])
-                binary += getRegisNumber(instruction[3]) + '00'
+                binary += getRegisNumber(instruction[3]) + '000000000000000'
             # toda vez que realizamos uma instrução que não é um Jump salvamos o numero do ultimo registrador
             # em uma variavel
         if instruction[0] != 'J' and len(instruction) > 1:
@@ -158,10 +174,10 @@ if __name__ == "__main__":
             binary_instructions.append(binary)
     # e por ultimo adicionamos uma instrução que para o clock passando o ultimo registrador utilizado
     # para que ele apareça no display do processador
-    binary_instructions.append('11111' + last_reg + '00000000')
+    binary_instructions.append('11111' + last_reg + '00000000000000000000000')
     # processo de conversão de binario para hexa-decimal
     for b in binary_instructions:
-        hex_file.write(hex(int(b, 2))[2:].zfill(4))
+        hex_file.write(hex(int(b, 2))[2:].zfill(8))
         hex_file.write('\n')
 
     hex_file.close()
